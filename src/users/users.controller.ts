@@ -18,7 +18,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  findAll(@Query('role') role?: 'ADMIN' | 'MANAGER' | 'ACCOUNTANT') {
+  findAll(@Query('role') role?: 'ADMIN' | 'USER' | 'ACCOUNTANT') {
     return this.userService.findAll(role);
   }
   @Get(':id')
@@ -30,7 +30,7 @@ export class UsersController {
     @Body(ValidationPipe)
     createUserDto: CreateUserDto,
   ) {
-    return createUserDto;
+    return this.userService.create(createUserDto);
   }
   @Patch(':id')
   update(

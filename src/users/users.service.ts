@@ -15,22 +15,20 @@ export class UsersService {
     { id: 3, name: 'Arun', email: 'arun@gmail.com', role: 'ACCOUNTANT' },
     { id: 4, name: 'Sujesh', email: 'sujesh@gmail.com', role: 'USER' },
   ];
-  findAll(role?: 'ADMIN' | 'MANAGER' | 'ACCOUNTANT') {
+  findAll(role?: 'ADMIN' | 'USER' | 'ACCOUNTANT') {
     if (role) {
-      const rolesArray = this.users.filter((user) => user.role === role);
-      if (rolesArray.length === 0)
-        throw new NotFoundException('User role not found.');
-      return rolesArray;
+      console.log(role);
+      return this.usersModel.find({ role: role });
     }
-    return this.users;
+    return this.usersModel.find();
   }
   findOne(id: number) {
     const user = this.users.find((user) => user.id === id);
     if (!user) throw new NotFoundException('User not found.');
     return user;
   }
-  create(id: number, createUserDto: CreateUserDto): Promise<Users> {
-    const createdUser = new this.usersModel(CreateUserDto);
+  create(createUserDto: CreateUserDto): Promise<Users> {
+    const createdUser = new this.usersModel(createUserDto);
     return createdUser.save();
   }
   update(id: number, updateUserDto: UpdateUserDto) {}
