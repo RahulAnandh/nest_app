@@ -22,7 +22,7 @@ export class UsersService {
     return this.usersModel.find();
   }
   findOne(id: string) {
-    const user = this.usersModel.find({
+    const user = this.usersModel.findOne({
       _id: Object(id),
     });
     if (!user) throw new NotFoundException('User not found.');
@@ -30,6 +30,7 @@ export class UsersService {
   }
   create(createUserDto: CreateUserDto): Promise<Users> {
     const createdUser = new this.usersModel(createUserDto);
+    if (!createdUser) throw new NotFoundException('User can not be created.');
     return createdUser.save();
   }
   update(id: string, updateUserDto: UpdateUserDto) {
@@ -38,12 +39,12 @@ export class UsersService {
       updateUserDto,
       { new: true },
     );
+    if (!updated_user) throw new NotFoundException('User can not be updated.');
     return updated_user;
   }
-  delete(id: number) {
-    const user = this.users.find((user) => {
-      user.id === id;
-    });
-    return user;
+  delete(id: string) {
+    const deleted_user = this.usersModel.findOneAndDelete({ _id: Object(id) });
+    if (!deleted_user) throw new NotFoundException('User can not be deleted.');
+    return deleted_user;
   }
 }
