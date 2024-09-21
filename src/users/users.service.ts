@@ -17,13 +17,14 @@ export class UsersService {
   ];
   findAll(role?: 'ADMIN' | 'USER' | 'ACCOUNTANT') {
     if (role) {
-      console.log(role);
       return this.usersModel.find({ role: role });
     }
     return this.usersModel.find();
   }
-  findOne(id: number) {
-    const user = this.users.find((user) => user.id === id);
+  findOne(id: string) {
+    const user = this.usersModel.find({
+      _id: Object(id),
+    });
     if (!user) throw new NotFoundException('User not found.');
     return user;
   }
@@ -31,7 +32,14 @@ export class UsersService {
     const createdUser = new this.usersModel(createUserDto);
     return createdUser.save();
   }
-  update(id: number, updateUserDto: UpdateUserDto) {}
+  update(id: string, updateUserDto: UpdateUserDto) {
+    const updated_user = this.usersModel.findOneAndUpdate(
+      { _id: Object(id) },
+      updateUserDto,
+      { new: true },
+    );
+    return updated_user;
+  }
   delete(id: number) {
     const user = this.users.find((user) => {
       user.id === id;

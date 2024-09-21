@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -22,7 +23,7 @@ export class UsersController {
     return this.userService.findAll(role);
   }
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
   @Post()
@@ -34,11 +35,11 @@ export class UsersController {
   }
   @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body(ValidationPipe)
     updateUserDto: UpdateUserDto,
   ) {
-    return { id, ...updateUserDto };
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
