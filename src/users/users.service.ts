@@ -1,5 +1,9 @@
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -39,7 +43,8 @@ export class UsersService {
       updateUserDto,
       { new: true },
     );
-    if (!updated_user) throw new NotFoundException('User can not be updated.');
+    if (!updated_user)
+      throw new NotAcceptableException('User can not be updated.');
     return updated_user;
   }
   delete(id: string) {
