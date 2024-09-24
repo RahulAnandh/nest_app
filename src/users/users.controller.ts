@@ -14,6 +14,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -45,5 +46,12 @@ export class UsersController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.userService.delete(id);
+  }
+  @Post('/login')
+  login(
+    @Body(ValidationPipe)
+    loginUserDto: LoginUserDto,
+  ) {
+    return this.userService.login(loginUserDto);
   }
 }

@@ -3,22 +3,18 @@ import {
   Injectable,
   NotAcceptableException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { Users } from '../schemas/users.schema';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(Users.name) private usersModel: Model<Users>) {}
 
-  private users = [
-    { id: 1, name: 'Rahul', email: 'rahulanandh80@gmail.com', role: 'ADMIN' },
-    { id: 2, name: 'Nikhil', email: 'nikhil@gmail.com', role: 'USER' },
-    { id: 3, name: 'Arun', email: 'arun@gmail.com', role: 'ACCOUNTANT' },
-    { id: 4, name: 'Sujesh', email: 'sujesh@gmail.com', role: 'USER' },
-  ];
   findAll(role?: 'ADMIN' | 'USER' | 'ACCOUNTANT') {
     if (role) {
       return this.usersModel.find({ role: role });
@@ -51,5 +47,19 @@ export class UsersService {
     const deleted_user = this.usersModel.findOneAndDelete({ _id: Object(id) });
     if (!deleted_user) throw new NotFoundException('User can not be deleted.');
     return deleted_user;
+  }
+  async login(loginUserDto: LoginUserDto) {
+    const user = await this.usersModel.findOne({
+      user_name: loginUserDto.user_name,
+      password: loginUserDto.password,
+    });
+    if (!user) {
+      throw new UnauthorizedException();
+    } else {
+      return {
+        login_status: true,
+        token: '123',
+      };
+    }
   }
 }
