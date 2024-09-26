@@ -24,7 +24,6 @@ export class AuthController {
   logIn(@Body() loginAuthDto: LogInDto) {
     return this.authService.logIn(loginAuthDto);
   }
-
   @Get()
   findAll() {
     return this.authService.findAll();
