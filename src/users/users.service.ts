@@ -9,7 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { Users } from '../schemas/users.schema';
+import { Users } from './schemas/users.schema';
 
 @Injectable()
 export class UsersService {
@@ -56,10 +56,7 @@ export class UsersService {
     if (!user) {
       throw new UnauthorizedException();
     } else {
-      return {
-        login_status: true,
-        token: '123',
-      };
+      return user;
     }
   }
 }
