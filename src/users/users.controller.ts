@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { IsNumberExistDto } from './dto/is-number-exist.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -53,5 +54,12 @@ export class UsersController {
     loginUserDto: LoginUserDto,
   ) {
     return this.userService.login(loginUserDto);
+  }
+  @Post('/login/is_number_exist')
+  isNumberExist(
+    @Body(ValidationPipe)
+    isNumberExistDto: IsNumberExistDto,
+  ) {
+    return this.userService.isNumberExist(isNumberExistDto);
   }
 }

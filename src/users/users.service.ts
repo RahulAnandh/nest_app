@@ -10,6 +10,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Users } from './schemas/users.schema';
+import { IsNumberExistDto } from './dto/is-number-exist.dto';
 
 @Injectable()
 export class UsersService {
@@ -57,6 +58,17 @@ export class UsersService {
       throw new UnauthorizedException();
     } else {
       return user;
+    }
+  }
+  async isNumberExist(isNumberExistDto: IsNumberExistDto) {
+    console.log(isNumberExistDto);
+    const is_number_exist = await this.usersModel.findOne({
+      user_name: isNumberExistDto.mobile,
+    });
+    if (!is_number_exist) {
+      throw new UnauthorizedException();
+    } else {
+      return true;
     }
   }
 }
